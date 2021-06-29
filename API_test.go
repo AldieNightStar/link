@@ -23,36 +23,27 @@ func TestParse(t *testing.T) {
 }
 
 func TestParseAndRunCode(t *testing.T) {
-	src := "[print a][print b][print [add a 1]]"
+	src := "[set 'a' [add a 25]][set 'a' [add a -5]]"
 	code := ParseCode(src)
 	r := NewRuntimeMemScope(nil)
-
-	pcnt := 0
-	var res float64
-
-	r.SetFunc("print", func(v []*Variable, rms *RuntimeMemScope) *Variable {
-		for _, s := range v {
-			println(s.ReadString())
-		}
-		pcnt += 1
-		return nil
-	})
 
 	r.SetFunc("add", func(v []*Variable, rms *RuntimeMemScope) *Variable {
 		n1 := v[0].ReadNumber()
 		n2 := v[1].ReadNumber()
-		res = n1 + n2
 		return NewVariable(n1 + n2)
 	})
 
-	r.Mem["a"] = float64(63)
+	r.SetFunc("set", func(v []*Variable, rms *RuntimeMemScope) *Variable {
+		n := v[0].ReadString()
+		rms.SetVar(n, v[1].Value)
+		return nil
+	})
+
+	r.Mem["a"] = float64(10)
 
 	RunCode(code, r)
 
-	if pcnt != 3 {
-		t.Fatal("Prints count is not 3.", pcnt)
-	}
-	if res != 64 {
-		t.Fatal("Result of adding is not 64.", res)
+	if r.Mem["a"] != float64(30) {
+		t.Fatal("Number is not valid.", r.Mem["a"])
 	}
 }
