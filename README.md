@@ -17,7 +17,7 @@
 ## Types
 * Command block
 ```
-[commandNmae arg1 arg2 arg3]
+[commandName arg1 arg2 arg3]
 ```
 * CodeBlock
 ```

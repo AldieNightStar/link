@@ -67,6 +67,15 @@ func (v *Variable) IsNil() bool {
 	return v.Value == nil
 }
 
+func (v *Variable) ReadBool() bool {
+	if b, ok := v.Value.(bool); ok {
+		return b
+	} else if b, ok := v.Value.(*bool); ok {
+		return *b
+	}
+	return false
+}
+
 // =======================
 // =======================
 // =======================
@@ -77,10 +86,12 @@ type RuntimeMemScope struct {
 }
 
 func NewRuntimeMemScope(parent *RuntimeMemScope) *RuntimeMemScope {
-	return &RuntimeMemScope{
+	r := &RuntimeMemScope{
 		Mem:    make(map[string]interface{}),
 		Parent: parent,
 	}
+	std_init(r)
+	return r
 }
 
 func (r *RuntimeMemScope) GetVar(name string) interface{} {

@@ -1,0 +1,11 @@
+[print "Hello!"]
+[set names [arr
+	"Ihor Fox"
+	"Liza Yaremko"
+	"John Khiel"
+	"Haxi Denti"
+]]
+[print [arr-len names]]
+[rep 'i' [arr-len names] {
+	[print [arr-get names i]]
+}]

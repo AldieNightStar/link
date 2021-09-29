@@ -143,6 +143,7 @@ func parser_code_block(s string) *parser.Result {
 				break
 			}
 		} else if cmd, ok := res.Token.(*TokenCommand); ok {
+			cnt += res.Count
 			codeBlock.Commands = append(codeBlock.Commands, cmd)
 		}
 	}
